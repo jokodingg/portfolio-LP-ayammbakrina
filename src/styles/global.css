@@ -94,3 +94,15 @@ body:has(dialog[open]) { overflow: hidden; }
   .reveal { opacity: 1; transform: none; transition: none; }
   * { transition-duration: 0s !important; }
 }
+
+@media (max-width: 1023px) {
+  #menu-list:not(.expanded) [data-more] { display: none; }
+}
+
+/* Mobile running text for the yellow strip. Two copies scroll by half for a seamless loop. */
+.marquee-track { display: flex; width: max-content; animation: marquee 18s linear infinite; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; }
+  .marquee-track { animation: none; padding-inline: 20px; }
+}

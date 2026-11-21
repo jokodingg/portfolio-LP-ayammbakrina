@@ -5,8 +5,9 @@ import type { MenuItem, Tag } from '../data/site';
 
 interface Props {
   item: MenuItem;
+  more?: boolean;
 }
-const { item } = Astro.props;
+const { item, more = false } = Astro.props;
 
 const tone: Record<Tag['tone'], string> = {
   yellow: 'bg-[#FEC330] text-[#6F5100]',
@@ -18,7 +19,7 @@ const tone: Record<Tag['tone'], string> = {
 const photoId = `foto-${item.id}`;
 ---
 
-<li data-reveal id={`menu-${item.id}`} class="group scroll-mt-24 overflow-hidden rounded-2xl bg-white transition-[transform,box-shadow] duration-300 lg:flex lg:flex-col lg:hover:-translate-y-1 lg:hover:shadow-[0_18px_40px_-24px_rgba(30,20,16,0.45)]">
+<li data-reveal data-more={more || undefined} id={`menu-${item.id}`} class="group scroll-mt-24 overflow-hidden rounded-2xl bg-white transition-[transform,box-shadow] duration-300 lg:flex lg:flex-col lg:hover:-translate-y-1 lg:hover:shadow-[0_18px_40px_-24px_rgba(30,20,16,0.45)]">
   <!-- Mobile: compact row -->
   <div class="flex items-center gap-3 p-3 lg:hidden">
     {item.image ? (
@@ -28,8 +29,11 @@ const photoId = `foto-${item.id}`;
     ) : (
       <span class="grid size-[72px] shrink-0 place-items-center rounded-xl bg-stone-2 text-center text-[10px] font-medium text-muted">Foto<br />menyusul</span>
     )}
-    <div class="min-w-0 flex-1">
-      <h3 class="text-[15px] font-bold leading-snug text-[#1C1B1B]">{item.name}</h3>
+    <div class={`min-w-0 flex-1 ${item.image ? 'cursor-pointer' : ''}`} data-open={item.image ? photoId : undefined}>
+      {item.featured && <span class={`mb-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold ${tone[item.tag.tone]}`}>{item.tag.label}</span>}
+      <h3 class="text-[15px] font-bold leading-snug text-[#1C1B1B]">
+        {item.image ? <button type="button" class="text-left" aria-label={`Lihat detail ${item.name}`}>{item.name}</button> : item.name}
+      </h3>
       <p class="mt-1 text-sm font-bold text-red">{item.pricePrefix && `${item.pricePrefix} `}{item.price} <span class="text-xs font-normal text-muted">{item.unit}</span></p>
     </div>
     <button type="button" data-press data-order={`1 ${item.name}`} class="flex shrink-0 items-center gap-1 rounded-full bg-stone px-4 py-2.5 text-xs font-semibold text-ink-2" aria-label={`Pesan ${item.name}`}>
@@ -68,7 +72,10 @@ const photoId = `foto-${item.id}`;
 
   {item.image && (
     <dialog id={photoId} class="m-auto w-[min(350px,calc(100%-32px))] rounded-[20px] bg-white p-3 text-ink" aria-label={item.name}>
-      <h3 class="px-1 pt-1 text-lg font-bold text-[#1C1B1B]">{item.name}</h3>
+      <div class="flex items-start justify-between gap-3 px-1 pt-1">
+        <h3 class="text-lg font-bold text-[#1C1B1B]">{item.name}</h3>
+        <button type="button" data-close class="-mr-1 -mt-1 grid size-9 shrink-0 place-items-center rounded-full bg-stone-2" aria-label="Tutup foto"><Icon name="close" class="size-5" /></button>
+      </div>
       <div class="relative mt-3 overflow-hidden rounded-[14px]">
         <Image src={item.image} alt={item.imageAlt} widths={[350, 700]} sizes="326px" class="h-60 w-full object-cover" />
         <div class="absolute inset-x-2 bottom-2 flex flex-wrap gap-1.5">
@@ -80,7 +87,9 @@ const photoId = `foto-${item.id}`;
       <p class="mt-3 px-1 text-sm leading-relaxed text-body">{item.description}</p>
       <div class="mt-3 flex items-center justify-between px-1 pb-1">
         <p class="text-lg font-bold text-red">{item.price} <span class="text-xs font-normal text-muted">{item.unit}</span></p>
-        <button type="button" data-close class="rounded-full bg-stone px-5 py-2.5 text-[13px] font-bold">Tutup</button>
+        <button type="button" data-press data-order={`1 ${item.name}`} class="flex items-center gap-1 rounded-full bg-red px-5 py-2.5 text-[13px] font-bold text-white hover:bg-red-dark" aria-label={`Pesan ${item.name}`}>
+          <Icon name="add" class="size-4" />Pesan
+        </button>
       </div>
     </dialog>
   )}

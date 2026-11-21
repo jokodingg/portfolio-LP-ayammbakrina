@@ -30,25 +30,13 @@ export type MenuItem = {
   imageAlt: string;
   imagePosition?: string;
   tag: Tag;
+  /** Show the tag on the compact mobile row too. */
+  featured?: boolean;
   chip: string;
   perk: string;
 };
 
 export const menu: MenuItem[] = [
-  {
-    id: 'ayam-bumbu-kuning',
-    name: 'Ayam Bumbu Kuning',
-    price: 'Rp 17.000',
-    unit: '/potong',
-    priceNumber: 17000,
-    description:
-      'Goreng gurih kuning rempah meresap sampai ke serat daging terdalam, tekstur empuk, lezat dan beraroma wangi rempah asli.',
-    image: ayamBumbuKuning,
-    imageAlt: 'Potongan ayam bumbu kuning Mbak Rina di wadah',
-    tag: { label: 'Favorit Keluarga', tone: 'yellow' },
-    chip: 'Bumbu Kuning',
-    perk: 'Free Sambal & Lalap',
-  },
   {
     id: 'ayam-rempah-laos',
     name: 'Ayam Rempah Laos',
@@ -59,8 +47,24 @@ export const menu: MenuItem[] = [
       'Ayam ungkep rempah dengan taburan serundeng laos gurih kriuk berlimpah khas nusantara. Sangat gurih disantap dengan nasi hangat.',
     image: ayamRempahLaos,
     imageAlt: 'Ayam rempah laos dengan serundeng, lalapan, dan timun',
-    tag: { label: 'Ayam Ungkep', tone: 'red' },
+    tag: { label: '🔥 Best Seller', tone: 'red' },
+    featured: true,
     chip: 'Serundeng Laos',
+    perk: 'Free Sambal & Lalap',
+  },
+  {
+    id: 'ayam-bumbu-kuning',
+    name: 'Ayam Bumbu Kuning',
+    price: 'Rp 17.000',
+    unit: '/potong',
+    priceNumber: 17000,
+    description:
+      'Goreng gurih kuning rempah meresap sampai ke serat daging terdalam, tekstur empuk, lezat dan beraroma wangi rempah asli.',
+    image: ayamBumbuKuning,
+    imageAlt: 'Potongan ayam bumbu kuning Mbak Rina di wadah',
+    tag: { label: '👨‍🍳 Chef Recommendation', tone: 'yellow' },
+    featured: true,
+    chip: 'Bumbu Kuning',
     perk: 'Free Sambal & Lalap',
   },
   {
