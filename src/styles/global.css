@@ -1,0 +1,96 @@
+@import 'tailwindcss';
+@import '@fontsource/poppins/700.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/plus-jakarta-sans/800.css';
+
+@theme {
+  --color-cream: #FFF8EC;
+  --color-red: #C8102E;
+  --color-red-dark: #A30D25;
+  --color-red-soft: #FBE1E1;
+  --color-yellow: #FFC72C;
+  --color-gold: #7A5C12;
+  --color-ink: #1E1410;
+  --color-ink-2: #1B1B1C;
+  --color-body: #5B403D;
+  --color-muted: #6B5A50;
+  --color-stone: #ECE7E3;
+  --color-stone-2: #F3F0EE;
+  --color-green: #008139;
+  --color-green-dark: #00652B;
+  --color-green-soft: #E6F4EA;
+  --font-display: 'Poppins', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+@media (min-width: 1024px) { html { scroll-padding-top: 124px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--color-cream); color: var(--color-ink); }
+
+dialog::backdrop { background: rgb(30 20 16 / 0.6); }
+dialog[open] { animation: pop .18s ease-out; }
+@keyframes pop { from { opacity: 0; transform: translateY(12px); } }
+@media (prefers-reduced-motion: reduce) { dialog[open] { animation: none; } }
+body:has(dialog[open]) { overflow: hidden; }
+
+:focus-visible { outline: 3px solid var(--color-yellow); outline-offset: 2px; }
+
+/* Motion: hero entrance, scroll reveal, press feedback. All off under reduced motion. */
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+@keyframes word-up { from { transform: translateY(105%); } }
+@keyframes mark-draw { from { background-size: 0% 4px; } }
+@keyframes card-in { from { opacity: 0; transform: translateY(40px) rotate(2.5deg) scale(.96); } }
+@keyframes photo-zoom { from { transform: scale(1.18); } }
+@keyframes info-up { from { opacity: 0; transform: translateY(24px); } }
+@keyframes pop-in { 0% { opacity: 0; transform: translateY(14px) scale(.9); } 70% { transform: translateY(-2px) scale(1.02); } }
+@keyframes badge-in { from { opacity: 0; transform: translateX(30px) rotate(6deg) scale(.8); } }
+@keyframes bob { 50% { transform: translateY(-6px); } }
+@keyframes ring { 0% { box-shadow: 0 0 0 0 rgb(52 199 89 / .5); } 100% { box-shadow: 0 0 0 8px rgb(52 199 89 / 0); } }
+
+/* Headline: each word slides up out of its own mask; "Asli Mbak Rina" gets a drawn underline. */
+.hero-title .word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.hero-title .word > span { display: inline-block; animation: word-up .7s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(.1s + var(--i) * 60ms); }
+.hero-mark { background: linear-gradient(var(--color-yellow), var(--color-yellow)) left bottom / 100% 4px no-repeat; padding-bottom: 6px; box-decoration-break: clone; -webkit-box-decoration-break: clone; animation: mark-draw .7s cubic-bezier(.6,0,.2,1) .75s both; }
+
+.hero-in > :not(.hero-title) { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+.hero-in > :nth-child(1) { animation-delay: 0s; }
+.hero-in > :nth-child(3) { animation-delay: .55s; }
+.hero-in > :nth-child(4) { animation-delay: .65s; }
+.hero-in > :nth-child(5) { animation-delay: .75s; }
+.hero-in > :nth-child(6) { animation-delay: .85s; }
+.hero-in > ul { animation: none; }
+.hero-in > ul > li { animation: pop-in .5s cubic-bezier(.2,.7,.2,1) both; }
+.hero-in > ul > li:nth-child(1) { animation-delay: .65s; }
+.hero-in > ul > li:nth-child(2) { animation-delay: .72s; }
+.hero-in > ul > li:nth-child(3) { animation-delay: .79s; }
+.hero-in > ul > li:nth-child(4) { animation-delay: .86s; }
+.hero-open { animation: ring 1.6s ease-out 1.2s 3; }
+
+/* Photo card: tilts in, photo settles from a zoom, price card and thumbnails follow. */
+.hero-card { animation: card-in .9s cubic-bezier(.2,.8,.2,1) .2s both; }
+.hero-photo img { animation: photo-zoom 1.6s cubic-bezier(.2,.7,.2,1) .2s both; }
+.hero-info { animation: info-up .6s cubic-bezier(.2,.7,.2,1) .8s both; }
+.hero-minis > * { animation: pop-in .55s cubic-bezier(.2,.7,.2,1) both; }
+.hero-minis > :nth-child(1) { animation-delay: .95s; }
+.hero-minis > :nth-child(2) { animation-delay: 1.05s; }
+.hero-badge { animation: badge-in .6s cubic-bezier(.3,1.4,.5,1) 1.2s both, bob 4s ease-in-out 2s infinite; }
+
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease var(--d, 0ms), transform .6s cubic-bezier(.2,.7,.2,1) var(--d, 0ms), translate .3s ease, box-shadow .3s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+[data-press] { transition: transform .15s ease, background-color .2s ease; }
+[data-press]:active { transform: scale(.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-in > *, .hero-in > ul > li, .hero-title .word > span, .hero-mark, .hero-open, .hero-card, .hero-photo img, .hero-info, .hero-minis > *, .hero-badge { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  * { transition-duration: 0s !important; }
+}

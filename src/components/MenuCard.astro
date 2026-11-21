@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { MenuItem, Tag } from '../data/site';
+
+interface Props {
+  item: MenuItem;
+}
+const { item } = Astro.props;
+
+const tone: Record<Tag['tone'], string> = {
+  yellow: 'bg-[#FEC330] text-[#6F5100]',
+  red: 'bg-red text-white',
+  brown: 'bg-[#795900] text-white',
+  green: 'bg-green text-white',
+  cream: 'bg-[#FFDFA0] text-[#261A00]',
+};
+const photoId = `foto-${item.id}`;
+---
+
+<li data-reveal id={`menu-${item.id}`} class="group scroll-mt-24 overflow-hidden rounded-2xl bg-white transition-[transform,box-shadow] duration-300 lg:flex lg:flex-col lg:hover:-translate-y-1 lg:hover:shadow-[0_18px_40px_-24px_rgba(30,20,16,0.45)]">
+  <!-- Mobile: compact row -->
+  <div class="flex items-center gap-3 p-3 lg:hidden">
+    {item.image ? (
+      <button type="button" data-open={photoId} class="shrink-0 overflow-hidden rounded-xl" aria-label={`Lihat foto ${item.name}`}>
+        <Image src={item.image} alt="" width={144} height={144} class="size-[72px] object-cover" />
+      </button>
+    ) : (
+      <span class="grid size-[72px] shrink-0 place-items-center rounded-xl bg-stone-2 text-center text-[10px] font-medium text-muted">Foto<br />menyusul</span>
+    )}
+    <div class="min-w-0 flex-1">
+      <h3 class="text-[15px] font-bold leading-snug text-[#1C1B1B]">{item.name}</h3>
+      <p class="mt-1 text-sm font-bold text-red">{item.pricePrefix && `${item.pricePrefix} `}{item.price} <span class="text-xs font-normal text-muted">{item.unit}</span></p>
+    </div>
+    <button type="button" data-press data-order={`1 ${item.name}`} class="flex shrink-0 items-center gap-1 rounded-full bg-stone px-4 py-2.5 text-xs font-semibold text-ink-2" aria-label={`Pesan ${item.name}`}>
+      <Icon name="add" class="size-4" />Pesan
+    </button>
+  </div>
+
+  <!-- Desktop: full card -->
+  <div class="relative hidden h-52 bg-stone-2 lg:block">
+    {item.image ? (
+      <Image src={item.image} alt={item.imageAlt} widths={[400, 760]} sizes="379px" class="size-full object-cover transition-transform duration-500 group-hover:scale-105" style={item.imagePosition ? `object-position:${item.imagePosition}` : undefined} />
+    ) : (
+      <span class="grid size-full place-items-center text-sm font-semibold text-body">[Foto bebek utuh menyusul]</span>
+    )}
+    <span class={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-bold ${tone[item.tag.tone]}`}>{item.tag.label}</span>
+    <span class="absolute right-3 top-3 rounded-full bg-cream px-2.5 py-0.5 text-[11px] font-bold text-ink-2">{item.chip}</span>
+  </div>
+  <div class="hidden flex-1 flex-col justify-between gap-5 p-6 lg:flex">
+    <div>
+      <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
+        <h3 class="grow basis-1/2 text-lg font-bold leading-snug text-ink-2">{item.name}</h3>
+        <p class="shrink-0 text-xl font-bold text-red">
+          {item.pricePrefix && <span class="block text-[11px] text-body">{item.pricePrefix}</span>}
+          {item.price} <span class="text-xs font-normal text-muted">{item.unit}</span>
+        </p>
+      </div>
+      <p class="mt-3 text-sm leading-relaxed text-body">{item.description}</p>
+    </div>
+    <div class="flex items-center justify-between">
+      <span class="flex items-center gap-1.5 text-[11px] font-bold text-green-dark"><Icon name="check" class="size-3.5" />{item.perk}</span>
+      <button type="button" data-press data-order={`1 ${item.name}`} class="flex items-center gap-1 rounded-full bg-stone px-4 py-2 text-xs font-semibold text-ink-2 hover:bg-[#E0D9D4]" aria-label={`Pesan ${item.name}`}>
+        <Icon name="add" class="size-4" />Pesan
+      </button>
+    </div>
+  </div>
+
+  {item.image && (
+    <dialog id={photoId} class="m-auto w-[min(350px,calc(100%-32px))] rounded-[20px] bg-white p-3 text-ink" aria-label={item.name}>
+      <h3 class="px-1 pt-1 text-lg font-bold text-[#1C1B1B]">{item.name}</h3>
+      <div class="relative mt-3 overflow-hidden rounded-[14px]">
+        <Image src={item.image} alt={item.imageAlt} widths={[350, 700]} sizes="326px" class="h-60 w-full object-cover" />
+        <div class="absolute inset-x-2 bottom-2 flex flex-wrap gap-1.5">
+          <span class="rounded-full bg-yellow px-2.5 py-1 text-xs font-semibold text-gold">{item.tag.label}</span>
+          <span class="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gold">{item.chip}</span>
+          <span class="rounded-full bg-green-soft px-2.5 py-1 text-xs font-semibold text-[#006D2F]">{item.perk}</span>
+        </div>
+      </div>
+      <p class="mt-3 px-1 text-sm leading-relaxed text-body">{item.description}</p>
+      <div class="mt-3 flex items-center justify-between px-1 pb-1">
+        <p class="text-lg font-bold text-red">{item.price} <span class="text-xs font-normal text-muted">{item.unit}</span></p>
+        <button type="button" data-close class="rounded-full bg-stone px-5 py-2.5 text-[13px] font-bold">Tutup</button>
+      </div>
+    </dialog>
+  )}
+</li>
