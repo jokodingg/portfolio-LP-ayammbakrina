@@ -41,7 +41,7 @@ dialog[open] { animation: pop .18s ease-out; }
 @media (prefers-reduced-motion: reduce) { dialog[open] { animation: none; } }
 body:has(dialog[open]) { overflow: hidden; }
 
-:focus-visible { outline: 3px solid var(--color-yellow); outline-offset: 2px; }
+@layer base { :focus-visible { outline: 3px solid var(--color-yellow); outline-offset: 2px; } }
 
 /* Motion: hero entrance, scroll reveal, press feedback. All off under reduced motion. */
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
